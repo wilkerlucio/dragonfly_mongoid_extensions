@@ -1,0 +1,1 @@
+require 'dragonfly_mongoid_extensions'
