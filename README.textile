@@ -1,0 +1,50 @@
+h1. DragonflyMongoidExtensions
+
+h2. Install
+
+This plugin makes Dragonfly works with Mongoid like it works with ActiveRecord
+
+To install just do:
+
+bc. script/plugin install git://github.com/wilkerlucio/dragonfly_mongoid_extensions.git
+
+Then you will need to configure, to do it just generate dragonfly initializer like you do with ActiveRecord:
+
+bc. script/generate dragonfly_app images
+
+Open this file and edit the integration, the default should be something like this:
+
+bc. # Extend ActiveRecord
+# This allows you to use e.g.
+#   other_accessor :my_attribute
+# in your models.
+ActiveRecord::Base.extend Dragonfly::ActiveRecordExtensions
+ActiveRecord::Base.register_dragonfly_app(:image, Dragonfly::App[:images])
+
+You should replace these lines with:
+
+bc. # Plug Mongoid Extensions
+Mongoid::Document::InstanceMethods.module_eval do
+  def self.included(base)
+    base.extend Dragonfly::MongoidExtensions::ClassMethods
+    base.send :include, Dragonfly::MongoidExtensions::InstanceMethods
+    base.register_dragonfly_app :image, Dragonfly::App[:images]
+  end
+end
+
+Them you are ready to go!
+
+h2. Example model
+
+A sample model for you:
+
+bc.. class User
+  include Mongoid::Document
+  
+  field :name
+  field :email
+  
+  image_accessor :avatar
+end
+
+p. Notice you dont need to declare @avatar_uid@ field, the extension will do it automatic for you.
