@@ -54,7 +54,11 @@ h2. Using GridFS as Data Storage
 We like Mongo, so, lets use it to store the content too :)
 To configure GridFS with mongoid is really simple, lets take a look at relevant part in documentation for it:
 
-bc. app = Dragonfly::App[:images]
+bc.. File.open(File.join(RAILS_ROOT, 'config/database.mongo.yml'), 'r') do |f|
+  @settings = YAML.load(f)[RAILS_ENV]
+end
+
+app = Dragonfly::App[:images]
 app.configure_with(Dragonfly::RMagickConfiguration)
 app.datastore = Dragonfly::DataStorage::MongoGridFsStore.new @settings["host"], @settings["database"]
 app.configure do |c|
@@ -65,4 +69,4 @@ app.configure do |c|
   end
 end
 
-Its just that, if you configured Mongoid like the manual says, it will just works :)
+p. Its just that, if you configured Mongoid like the manual says, it will just works :)
