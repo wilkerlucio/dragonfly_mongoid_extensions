@@ -48,3 +48,21 @@ bc.. class User
 end
 
 p. Notice you dont need to declare @avatar_uid@ field, the extension will do it automatic for you.
+
+h2. Using GridFS as Data Storage
+
+We like Mongo, so, lets use it to store the content too :)
+To configure GridFS with mongoid is really simple, lets take a look at relevant part in documentation for it:
+
+bc. app = Dragonfly::App[:images]
+app.configure_with(Dragonfly::RMagickConfiguration)
+app.datastore = Dragonfly::DataStorage::MongoGridFsStore.new @settings["host"], @settings["database"]
+app.configure do |c|
+  c.log = Rails.logger
+  c.url_handler.configure do |u|
+    u.secret = 'ce61f1fdfef4b467a9b559d37c6bd28c9453ff08'
+    u.path_prefix = '/media'
+  end
+end
+
+Its just that, if you configured Mongoid like the manual says, it will just works :)
