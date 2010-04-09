@@ -38,7 +38,7 @@ h2. Example model
 
 A sample model for you:
 
-bc..class User
+bc.. class User
   include Mongoid::Document
   
   field :name
@@ -53,7 +53,7 @@ h2. Removing uploads
 
 For helping your life we also provides an extra field to remove the image.
 
-bc..<% form_for @user, :html => {:multipart => true} do |f| %>
+bc.. <% form_for @user, :html => {:multipart => true} do |f| %>
   <p>
     <label>My Avatar</label>
     <%= f.file_field :avatar %>
