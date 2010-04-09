@@ -38,7 +38,7 @@ h2. Example model
 
 A sample model for you:
 
-bc.. class User
+bc..class User
   include Mongoid::Document
   
   field :name
@@ -48,6 +48,26 @@ bc.. class User
 end
 
 p. Notice you dont need to declare @avatar_uid@ field, the extension will do it automatic for you.
+
+h2. Removing uploads
+
+For helping your life we also provides an extra field to remove the image.
+
+bc..<% form_for @user, :html => {:multipart => true} do |f| %>
+  <p>
+    <label>My Avatar</label>
+    <%= f.file_field :avatar %>
+  </p>
+
+  <p>
+    <label>
+      <%= f.check_box :remove_avatar %>
+      Remove avatar
+    </label>
+  </p>
+<% end %>
+
+p. Simple like this.
 
 h2. Using GridFS as Data Storage
 

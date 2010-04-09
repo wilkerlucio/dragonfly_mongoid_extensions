@@ -23,6 +23,11 @@ module Dragonfly
         end
       end
       
+      def check_attachments_for_remove
+        attachments.each do |attribute, attachment|
+          send("#{attribute}_uid=", nil) if instance_variable_get("@remove_#{attribute}").to_s.match(/^1|true$/i)
+        end
+      end
     end
   end
 end

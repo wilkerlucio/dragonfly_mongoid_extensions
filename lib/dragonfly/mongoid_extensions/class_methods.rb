@@ -52,6 +52,17 @@ module Dragonfly
             define_method attribute do
               attachments[attribute].to_value
             end
+            
+            # Define methods for delete
+            define_method "remove_#{attribute}" do
+              instance_variable_get("@remove_#{attribute}") || 0
+            end
+            
+            define_method "remove_#{attribute}=" do |value|
+              instance_variable_set("@remove_#{attribute}", value)
+            end
+            
+            before_save :check_attachments_for_remove
           end
     
         end
