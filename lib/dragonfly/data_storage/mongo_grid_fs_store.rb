@@ -15,12 +15,16 @@ module Dragonfly
       end
 
       def retrieve(uid)
-        file = @grid.get(Mongo::ObjectID.from_string(uid))
+        file = @grid.get(BSON::ObjectID.from_string(uid))
         file.read
+      rescue
+        raise DataNotFound, $!.message  
       end
       
       def destroy(uid)
-        @grid.delete(Mongo::ObjectID.from_string(uid))
+        @grid.delete(BSON::ObjectID.from_string(uid))
+      rescue
+        raise DataNotFound, $!.message
       end
     end
   end
