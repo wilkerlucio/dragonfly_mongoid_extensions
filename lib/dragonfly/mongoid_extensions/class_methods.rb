@@ -8,7 +8,10 @@ module Dragonfly
         metaclass.class_eval do
     
           # Defines e.g. 'image_accessor' for any activerecord class body
-          define_method "#{accessor_prefix}_accessor" do |attribute|
+          define_method "#{accessor_prefix}_accessor" do |*args|
+            attribute = args.shift
+            options = args.length > 0 ? args.shift : {}
+            
             # Define field for mongoid
             field "#{attribute}_uid"
             
@@ -42,6 +45,13 @@ module Dragonfly
       
             # Register the new attribute
             dragonfly_apps_for_attributes[attribute] = app
+            
+            # Define default, if has
+            if options[:default]
+              define_method "#{attribute}_default" do
+                options[:default]
+              end
+            end
             
             # Define the setter for the attribute
             define_method "#{attribute}=" do |value|

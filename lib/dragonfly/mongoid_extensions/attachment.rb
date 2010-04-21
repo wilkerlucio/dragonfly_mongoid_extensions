@@ -53,12 +53,25 @@ module Dragonfly
       end
       
       def to_value
-        self if been_assigned?
+        self if been_assigned? or has_default?
       end
       
       def url(*args)
         unless uid.nil? || uid.is_a?(PendingUID)
           app.url_for(uid, *args)
+        else
+          if has_default?
+            default = parent_model.send "#{attribute_name}_default"
+            ext = File.extname(default)
+            format = ext.blank? ? :jpg : ext[1..-1].to_sym
+          
+            parameters = app.parameters_class.from_args(*args)
+            parameters.uid = "_"
+            parameters.format = format
+            parameters.default = default
+          
+            app.url_handler.parameters_to_url(parameters)
+          end
         end
       end
       
@@ -87,6 +100,10 @@ module Dragonfly
       end
       
       private
+      
+      def has_default?
+        parent_model.respond_to?("#{attribute_name}_default")
+      end
       
       def been_assigned?
         uid
