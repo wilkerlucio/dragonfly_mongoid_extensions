@@ -10,7 +10,7 @@ module Dragonfly
       
       def store(temp_object)
         # returns object id
-        id = @grid.put(File.read(temp_object.path), temp_object.basename)
+        id = @grid.put(File.read(temp_object.path), :filename => temp_object.basename)
         id
       end
 
