@@ -81,6 +81,7 @@ end
 app = Dragonfly::App[:images]
 app.configure_with(Dragonfly::RMagickConfiguration)
 app.datastore = Dragonfly::DataStorage::MongoGridFsStore.new @settings["host"], @settings["database"]
+app.defaults_path = File.join(RAILS_ROOT, %w[public images])
 app.configure do |c|
   c.log = Rails.logger
   c.url_handler.configure do |u|
@@ -90,3 +91,16 @@ app.configure do |c|
 end
 
 p. Its just that, if you configured Mongoid like the manual says, it will just works :)
+
+h2. Default image support
+
+If you use my branch of "dragonfly":http://github.com/wilkerlucio/dragonfly you can use the support for
+default images. In order to do it you first need to configure initializers to setup the default images path
+(if you used my configuration above, its already set). Them just do in your model:
+
+bc. class User
+  image_accessor :avatar, :default => "image.png"
+end
+
+So, this will use the image.png for users that don't send an avatar. Sure you can use it as a regular uploaded
+file (can do any image modifications on fly).
