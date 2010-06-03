@@ -5,7 +5,7 @@ module Dragonfly
       include Validations
 
       def register_dragonfly_app(accessor_prefix, app)
-        metaclass.class_eval do
+        singleton_class.class_eval do
     
           # Defines e.g. 'image_accessor' for any activerecord class body
           define_method "#{accessor_prefix}_accessor" do |*args|
